@@ -1,16 +1,24 @@
 // service-worker.js
 
-const CACHE_NAME = "v1-gamingwebsite";
+const CACHE_NAME = 'Gotto_Job';
 const urlsToCache = [
-  "/Gotto_Job/", // root
-  "/Gotto_Job/index.html",
-  "/Gotto_Job/styles.css",     // replace with your actual CSS file
-  "/Gotto_Job/script.js",      // replace with your actual JS file
-  "/Gotto_Job/logo.png",       // any images you use
-  // Add more assets as needed
+  'Gotto_Job/',
+  'Gotto_Job/index.html',
+  'Gotto_Job/about.html',
+  'Gotto_Job/contact.html',
+  'Gotto_Job/job-details.html',
+  'Gotto_Job/job-listings.html',
+  'Gotto_Job/css/style.css', // adjust if your CSS path is different
+  'Gotto_Job/js/bootstrap.min.js',
+  'Gotto_Job/js/counter.js',
+  'Gotto_Job/js/custom.js',
+  'Gotto_Job/js/jquery.min.js',
+  'Gotto_Job/js/owl.carousel.min.js',
+  // Add image/font paths if needed
 ];
 
-self.addEventListener("install", (event) => {
+// Install event
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache);
@@ -18,30 +26,11 @@ self.addEventListener("install", (event) => {
   );
 });
 
-self.addEventListener("fetch", (event) => {
+// Fetch event
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return (
-        cachedResponse ||
-        fetch(event.request).catch(() =>
-          caches.match("/Gotto_Job/offline.html") // optional offline fallback
-        )
-      );
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
-        })
-      )
-    )
   );
 });
